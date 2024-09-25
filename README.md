@@ -78,6 +78,40 @@ void checkDustSensor(LiquidCrystal &lcd) {
   Serial.println(" mg/m^3");
 }
 
+// gas_sensor.h
+#ifndef GAS_SENSOR_H
+#define GAS_SENSOR_H
+
+void setupGasSensor();
+void checkGasSensor();
+
+#endif
+
+// gas_sensor.cpp
+#include "gas_sensor.h"
+int smoke = A4;
+int buzzer = 11;
+
+void setupGasSensor() {
+  pinMode(smoke, INPUT);
+  pinMode(buzzer, OUTPUT);
+  Serial.println("Gas sensor warming up!");
+  delay(20000);  // Warm up time
+}
+
+void checkGasSensor() {
+  int sensorValue = analogRead(smoke);
+  Serial.print("Smoke sensor value: ");
+  Serial.print(sensorValue);
+
+  if (sensorValue > 460) {
+    Serial.println(" | Smoke detected!");
+    tone(buzzer, 1000, 200);
+  } else {
+    Serial.println(" | Smoke not detected!");
+    noTone(buzzer);
+  }
+}
 
 void loop() {
   checkDustSensor(lcd);
