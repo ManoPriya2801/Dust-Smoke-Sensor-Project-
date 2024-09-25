@@ -113,6 +113,48 @@ void checkGasSensor() {
   }
 }
 
+// current_sensor.h
+#ifndef CURRENT_SENSOR_H
+#define CURRENT_SENSOR_H
+
+void setupCurrentSensor();
+void checkCurrentSensor();
+
+#endif
+
+// current_sensor.cpp
+#include "current_sensor.h"
+
+double Voltage = 0;
+double Current = 0;
+
+void setupCurrentSensor() {
+  // Nothing to set up specifically
+}
+
+void checkCurrentSensor() {
+  for (int i = 0; i < 1000; i++) {
+    Voltage = (Voltage + (.0049 * analogRead(A5)));
+    delay(1);
+  }
+  Voltage = Voltage / 1000;
+  Current = (Voltage - 2.5) / 0.185;
+
+  Serial.print("Voltage (V) = ");
+  Serial.print(Voltage, 2);
+  Serial.print(" | Current (A) = ");
+  Serial.print(Current, 2);
+
+  if (Voltage > 0.97) {
+    Serial.println(" | Current overconsumed");
+    tone(buzzer, 1000, 300);
+  } else {
+    Serial.println(" | Current is normal");
+    noTone(buzzer);
+  }
+}
+
+
 void loop() {
   checkDustSensor(lcd);
   checkGasSensor();
