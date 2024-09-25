@@ -30,6 +30,55 @@ void setup() {
   setupCurrentSensor();
 }
 
+// dust_sensor.h
+#ifndef DUST_SENSOR_H
+#define DUST_SENSOR_H
+
+#include <LiquidCrystal.h>
+
+void setupDustSensor();
+void checkDustSensor(LiquidCrystal &lcd);
+
+#endif
+
+// dust_sensor.cpp
+#include "dust_sensor.h"
+
+int measurePin = A0;
+int ledPower = 8;
+float dustDensity = 0;
+
+void setupDustSensor() {
+  pinMode(measurePin, INPUT);
+  pinMode(ledPower, OUTPUT);
+}
+
+void checkDustSensor(LiquidCrystal &lcd) {
+  digitalWrite(ledPower, LOW);
+  delayMicroseconds(280);
+  float voMeasured = analogRead(measurePin);
+  digitalWrite(ledPower, HIGH);
+  delayMicroseconds(9680);
+
+  float calcVoltage = voMeasured * (5.0 / 1024);
+  dustDensity = 0.17 * calcVoltage - 0.1;
+  if (dustDensity < 0) dustDensity = 0.00;
+
+  lcd.clear();
+  if (dustDensity > 0.5) {
+    lcd.print("Dust detected");
+  } else if (dustDensity > 0.3) {
+    lcd.print("Moderate dust");
+  } else {
+    lcd.print("No dust");
+  }
+
+  Serial.print("Dust density: ");
+  Serial.print(dustDensity);
+  Serial.println(" mg/m^3");
+}
+
+
 void loop() {
   checkDustSensor(lcd);
   checkGasSensor();
