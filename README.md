@@ -1,6 +1,3 @@
-# Dust-Smoke-Sensor-Project-
-This is the code for the project "Smart Stabilizer for air conditioners". It uses sensors to detect voltage fluctuations, dust density, and smoke presence, alerting the user via LEDs, an LCD display, and a buzzer. The system helps prevent overcurrent, overheating, and air quality issues, ensuring the AC operates efficiently and safely.
-
 # Dust & Smoke Sensor Project
 
 This Arduino project monitors dust density, smoke levels, and current consumption. It uses the GP2Y1014AU0F dust sensor, MQ-6 gas sensor, and a current sensor.
